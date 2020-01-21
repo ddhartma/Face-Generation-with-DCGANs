@@ -39,12 +39,11 @@ In this project, I define and train a DCGAN on a dataset of faces. The goal is t
 In more detail, I am using Deep Convolutional Generative Adversarial Networks (DCGANs) to generate new fake images. The project is broken down into a series of tasks from loading in data to defining and training adversarial networks. At the end of the notebook, I have implemented a section to visualize the results of the trained Generator.  
 The generated samples look like fairly realistic faces with small amounts of noise.
 
-I am using the [CelebFaces Attributes Dataset (CelebA)](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to train your adversarial networks. Each of the CelebA images has been cropped to remove parts of the image that don't include a face, then resized down to 64x64x3 NumPy images. Some sample data is show below.
+I am using the [CelebFaces Attributes Dataset (CelebA)](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to train your adversarial networks. Each of the CelebA images has been cropped to remove parts of the image that don't include a face, then resized down to 64x64x3 NumPy images. The total number of images used for the Discriminator training is 10674. Some sample data is show below.
 
 ![image0]
 
 The code is written in PyTorch. If you are interested in the specific coding steps open the Jupyter Notebook *dlnd_face_generation.ipynb*. A description to *open/execute* the file is provided in the Getting Started section.
-
 
 
 ## Getting Started
@@ -60,8 +59,8 @@ Next, clone this repository by opening a terminal and typing the following comma
 
 ```
 $ cd $HOME  # or any other development directory you prefer
-$ git clone https://github.com/ddhartma/TV-Script-Generator.git
-$ cd project-tv-script-generation_cloned_2
+$ git clone ...
+$ cd ...
 ```
 A Python installation is needed. Python 3 is already preinstalled on many systems nowadays. You can check which version you have by typing the following command (you may need to replace python3 with python):
 
@@ -117,23 +116,17 @@ The following files were used for this project:
 - dlnd_face_generation.ipynb
 - problem_unittests.py
 - workspace_utils.py
-- data/Seinfeld_Scripts.txt
+- Data for the SDiscriminator Training is stored in *processed_celeba_small/celeba/...*
+- requirements.txt
 
-The data for RNN training process is provided in the text file  *data/Seinfeld_Scripts.txt*
-
-In order to run the Jupyter Notebook *dlnd_tv_script_generation.ipynb* use the Terminal/CLI and write
+In order to run the Jupyter Notebook *dlnd_face_generation.ipynb* use the Terminal/CLI and write
 
 ```
-jupyter notebook dlnd_tv_script_generation.ipynb
+jupyter notebook dlnd_face_generation.ipynb
 ```
 
 For further help regarding Jupyter Notebook check [Jupyter-ReadTheDocs](https://jupyter.readthedocs.io/en/latest/index.html)
 
-### Dataset Stats
-This is a short summary of the characteristics of the Seinfeld_Scripts.txt file:
-- The number of unique words: 46367
-- Number of lines: 109233
-- Average number of words in each line: 5.544240293684143
 
 ### Hyperparameters
 The DCGAN training success depends strongly on the right choice of hyperparameters. If the network isn't getting the desired results, tweak these parameters and/or the layers.
@@ -152,7 +145,7 @@ Hence, set and train the neural network with the following parameters:
 - Set **n_epochs** --- number of epochs
 
 
-In the following section the parameter tuning investigated in separated training runs is depicted. Furthermore the resulting **Loss** for each training run (parameter variation) is shown as a measure of training success.
+In the following section the parameter tuning is appended, which was investigated in separated training runs.
 ### Parameter: n_epochs
 
 Parameters          | 1st Train-Run | 2nd Train-Run | 3rd Train-Run | 4th Train-Run | 5th Train-Run | 6th Train-Run |
@@ -324,7 +317,7 @@ n_epochs            |   100         |   100           |   100           |
 
 
 #### Result for parameter lr:
-Learning rates in the range between 0.01 and 0.0001 were tested. In all three cases the GAN is able to learn and generated fake images of faces are successfully constructed. However,  a of lr=0.001 or lr=0.0001 lead to a slightly better feature resolution than lr = 0.01.
+Learning rates in the range between 0.01 and 0.0001 were tested. In all three cases the GAN is able to learn and generated fake images of faces are successfully constructed. However, a learning rate of lr=0.001 or lr=0.0001 lead to a slightly better feature resolution than lr = 0.01.
 
 
 ### Reasonable hyperparameter setting
@@ -339,12 +332,13 @@ conv-layers         |   4           |
 d_conv_dim          |   64          |    
 g_conv_dim          |   64          |  
 z_size              |   100         |  
-lr                  |   0.001       |   
+lr                  |   0.0001      |   
 beta1               |   0.5         |   
 beta2               |   0.999       |     
 dropout             |   no          |   
 n_epochs            |   100         |  
 
+![image23]
 ##### Generator and Discriminator loss
 ![image25]
 
@@ -375,7 +369,7 @@ As learning rates 0.01, 0.01 and 0.0001 were tested. In all three cases the GAN 
 
 - The dataset images are 64x64x3 NumPy images. In the get_dataloader function I resized the images down to 32x32x3. This is the image size for the Discriminator input and the size of the Generator output. This resolution of the generated images is noisy. If one would keep width=64 and height=64 the images could resemble more the original ones. However, this would also increase the training duration.
 
-- Regarding the optimizer strategy: For the Discriminator as well as for the Generator the same type of optimizer (Adam) was chosen with a learning rate down to 0.0001. A combination of different optimizer like SGD for the Discriminator and ADAM for the Generator as proposed by [Soumith](https://github.com/soumith/ganhacks) has not been tested yet.
+- Regarding the optimizer strategy: For the Discriminator as well as for the Generator the same type of optimizer (Adam) was chosen with a learning rate down to 0.0001. A combination of different optimizer like SGD for the Discriminator and Adam for the Generator as proposed by [Soumith](https://github.com/soumith/ganhacks) has not been tested yet.
 
 
 ## Acknowledgments
