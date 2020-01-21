@@ -140,16 +140,16 @@ The DCGAN training success depends strongly on the right choice of hyperparamete
 Hence, set and train the neural network with the following parameters:
 
 - Set **batch_size** --- to the batch size
-- Set **img_size** --- size of the output
-- Set **dropout (Layer)** --- dropout probability for Dropout-Layer
-- Set **num_epochs** --- to the number of epochs to train for
-- Set **learning_rate** --- to the learning rate for an Adam optimizer
-- Set **vocab_size** --- to the number of uniqe tokens in our vocabulary
-- Set **output_size** --- to the desired size of the output
-- Set **embedding_dim** --- to the embedding dimension; smaller than the vocab_size
-- Set **hidden_dim** --- to the hidden dimension of your RNN
-- Set **n_layers** --- to the number of layers/cells in your RNN
-- Set **show_every_n_batches** --- to the number of batches at which the neural network should print progress
+- Set **img_size** --- image size for the Discriminator input and the Generator output
+- Set **deconv-layers** --- number of deconvolutional layers for the Generator
+- Set **conv-layers** --- number of convolutional layers for the Discriminator
+- Set **d_conv_dime** --- input depth of the Discriminator
+- Set **g_conv_dim** --- output depth of the Generator
+- Set **z_size** --- inputs to the generator are vectors of length z_size
+- Set **beta1** --- the exponential decay rate for the first moment
+- Set **beta2** --- the exponential decay rate for the second-moment
+- Set **dropout** --- additional Dropout layers (not used)
+- Set **n_epochs** --- number of epochs
 
 
 In the following section the parameter tuning investigated in separated training runs is depicted. Furthermore the resulting **Loss** for each training run (parameter variation) is shown as a measure of training success.
@@ -349,21 +349,33 @@ n_epochs            |   100         |
 ![image25]
 
 ### Reasons for the chosen final hyperparameter setting:
+A whole bunch of parameters setting were tested in sequences (see evaluation above).
 
 #### n_epochs:
-This parameter was varied between 1 and 1000. The best value setting for n_epochs extends to the range 50...100. Lower epoch values lead to underfitting, higher epoch values tend to pronounced noisy behavior of the discriminator loss. For both regimes the generated face images are blurred. Therefore n_epochs was set to 100.
+n_epochs was varied between 1 and 1000. Its best value setting extends to the range 50...100. Lower epoch values lead to underfitting, higher epoch values tend to pronounced noisy behavior of the discriminator loss. For both extreme regimes the generated face images are blurred. Therefore n_epochs was set to 100.
 
 #### number of conv-layers and deconv-layers:
-Two models were constructed: one with 3 and another with 4 conv and deconv layers for the discriminator and generator, respectively. Corresponding images for conv-layers=3 and deconv-layers=3 look similar to conv-layers=4 and deconv-layers=4. Hence, a clear trend is hard to distinguish in these examples. However, the trend of losses is slightly better for conv-layers=deconv-layers=4 than for conv-layers=deconv-layers=3, i.e. higher (positive) loss for the Generator and slightly lower loss for the Discriminator. Therefore conv-layers=4 and deconv-layers=4 have been used for further parameter studies.
+Two models were constructed: one with 3 and another one with 4 conv and deconv layers for the discriminator and generator, respectively. Corresponding images for conv-layers=deconv-layers=3 look similar to conv-layers=deconv-layers=4. Hence, a clear trend is hard to distinguish in these examples. However, the trend of losses is slightly better for conv-layers=deconv-layers=4 than for conv-layers=deconv-layers=3, i.e. the loss for the Generator is higher and the loss for the Discriminator is slightly lower. Therefore conv-layers=4 and deconv-layers=4 have been used for further parameter studies.
 
 #### batch_size:
-The batch_size was varied between 64 and 512. A larger batch_size has a positive effect on the computational boost. However, if the batch_size is getting too high the feature resolution is getting worse. This can be clearly seen if one compares a batch_size of 512 with a batch_size of 128. Therefore a batch_size of 128 has been chosen.
+The value range for the batch_size was chosen between 64 and 512. A larger batch_size has a positive effect on the computational boost. However, if the batch_size is getting too high the feature resolution is getting worse (more blurred). This can be clearly seen if one compares a batch_size of 512 with a batch_size of 128. Therefore a batch_size of 128 has been chosen. Up to a batch_size of 512 no out-of-memory errors were observed (getting critical for higher batch_sizes).
 
 ##### conv_dim:
 The conv_dim value was investigated in the range between 32 and 256. With a higher conv_dim for the Generator and the Discriminator the resolution of feature details is getting higher. For example, eyes are better resolved with a conv_dim=256 than with a conv_dim=32. However, even a conv_dim of 64 leads to convincing results.
 
 #### lr:
-Learning rates in the range between 0.01 and 0.0001 were tested. In all three cases the GAN is able to learn and generated fake images of faces are successfully constructed. However, a of lr=0.001 or lr=0.0001 lead to a slightly better feature resolution than lr = 0.01.
+As learning rates 0.01, 0.01 and 0.0001 were tested. In all three cases the GAN is able to learn and generated fake images of faces successfully. However, lr=0.001 or lr=0.0001 lead to a slightly better feature resolution than lr = 0.01.
+
+### Further improvements:
+- To overcome the issue of a biased dataset (celebrity faces that are mostly white): one could add more images of non-white celebrity faces to get a more balanced dataset in the end.
+
+- The model size is limited by the number of conv-layers and deconv-layers which was set to 4 in maximum. Higher values were not tested so far. Increasing the model size could especially enhance the feature extraction of the Discriminator. The adversarial Generator is then forced to produce images with better feature resolution.
+
+- A further increase of the conv_dim could lead to better results. However, this would significantly increase the training time.
+
+- The dataset images are 64x64x3 NumPy images. In the get_dataloader function I resized the images down to 32x32x3. This is the image size for the Discriminator input and the size of the Generator output. This resolution of the generated images is noisy. If one would keep width=64 and height=64 the images could resemble more the original ones. However, this would also increase the training duration.
+
+- Regarding the optimizer strategy: For the Discriminator as well as for the Generator the same type of optimizer (Adam) was chosen with a learning rate down to 0.0001. A combination of different optimizer like SGD for the Discriminator and ADAM for the Generator as proposed by [Soumith](https://github.com/soumith/ganhacks) has not been tested yet.
 
 
 ## Acknowledgments
