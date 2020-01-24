@@ -1,6 +1,7 @@
 /processed_celeba_small/*
 /training_results_pkl/*
 /dlnd_face_generation/*
+/submission/*
 README-Template.md
 hyperparameter_commit_guide.txt
 parameter_valuation.ipynb
