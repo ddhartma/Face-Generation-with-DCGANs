@@ -34,9 +34,9 @@
 
 # Face Generation with DCGANs
 
-In this project, I define and train a DCGAN on a dataset of faces. The goal is to get a generator network to generate new images of faces that look as realistic as possible!
+In this project, I define and train a DCGAN on a dataset of faces. The goal is to get a generator network to generate new images of faces that look as realistic as possible.
 
-In more detail, I am using Deep Convolutional Generative Adversarial Networks (DCGANs) to generate new fake images. The project is broken down into a series of tasks from loading in data to defining and training adversarial networks. At the end of the notebook, I have implemented a section to visualize the results of the trained Generator.  
+In more detail, I am using Deep Convolutional Generative Adversarial Networks (DCGANs) to generate new fake images. The project is broken down into a series of tasks from loading in data to defining and training adversarial networks. At the end of the notebook, I provide a visualization of the generated images.
 The generated samples look like fairly realistic faces with small amounts of noise.
 
 I am using the [CelebFaces Attributes Dataset (CelebA)](http://mmlab.ie.cuhk.edu.hk/projects/CelebA.html) to train your adversarial networks. Each of the CelebA images has been cropped to remove parts of the image that don't include a face, then resized down to 64x64x3 NumPy images. The total number of images used for the Discriminator training is 10674. Some sample data is show below.
@@ -59,7 +59,7 @@ Next, clone this repository by opening a terminal and typing the following comma
 
 ```
 $ cd $HOME  # or any other development directory you prefer
-$ git clone ...
+$ git clone https://github.com/ddhartma/Face-Generation-with-DCGANs.git
 $ cd ...
 ```
 A Python installation is needed. Python 3 is already preinstalled on many systems nowadays. You can check which version you have by typing the following command (you may need to replace python3 with python):
