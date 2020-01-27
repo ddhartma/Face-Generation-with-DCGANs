@@ -374,4 +374,5 @@ As learning rates 0.01, 0.01 and 0.0001 were tested. In all three cases the GAN 
 
 ## Acknowledgments
 
-* README was inspired by https://gist.github.com/PurpleBooth/109311bb0361f32d87a2
+* README was inspired by [PurpleBooth](https://gist.github.com/PurpleBooth/109311bb0361f32d87a2)
+* For some inspiration about [Spectral_Normalization with GANs](https://github.com/christiancosgrove/pytorch-spectral-normalization-gan/blob/master/model_resnet.py)
